@@ -99,6 +99,53 @@ We propose that the following goals should be adopted for a standard C++ 2D grap
 ## How do I get a Window?
 
 There are some **portability pain points** that graphics programmers experience today that we could help solve.
+For example - how do we get a window in a portable way?
+
+<!-- Begin text dump from Corentin's blog. Needs to be cleaned up. -->
+
+The first thing one need to do play with pretty pixes is to get a “surface”. A canvas where pixels get drawn.
+
+So hopefully you have a surface class to which you give dimensions and that gets you a canvas on which to paint.
+
+But wait. On most desktop systems, if you want a surface you need to put it in a window. It’s customary for windows to have titles so a graphics API should probably handle that, right ?
+
+You probably also want the window to have an icon. An icon is a file on most system, the format of which is system specific. But sometime it’s not a path, it’s a name corresponding to a path.
+
+The size of a window can change during the execution of the program on some desktop operating system.
+
+Sometimes the window can be moved to another screen that has another resolution. And there is this weird new screens where there are virtual pixels that are bigger than true pixels ? Unless you are rendering an images or something then you should make sure you uses all the power of the small crispy pixes since the customer paid a premium for boasting about how crispy his screen is.
+
+That woman over there was jealous so she bought a TV with 40 bits per pixels. You can’t really see the difference but are you going to tell her she wasted 5000 bucks ?
+
+And then there is a screen in your pocket and IT ROTATES in all the directions and now the surface is all wonky. But it has no window so it has no title or icon.
+
+What time is it ? OH GOSH THAT THING HAS A SCREEN TOO BUT IT’S SO SMALL… Better go and read a book WTF ELECTRONIC INK that you should refresh as little as possible and that only is black ?
+
+World is crazy, right ? Let’s stick to Linux, shall we? So on Linux there is this thing called X11 which you request a surface to… oh sorry, while you are writing the paper X11 is being deprecated and now you should use Wayland… unless you rather have a frame buffer? It can be accelerated using opengl. or embedded opengl. totally different thing. But really, Vulkan is faster than both these things. Oh and on this system we prefer that you draw the windows yourself, there is a war raging on about CSD vs SSD it has been going on for years and you can’t take side.
+
+And if you have CSD please make sure that I can drag the windows properly and I have set up sticky corners so that the windows can be aligned nicely. Make sure to handle them. Properly. And when you drag the window it should be a bit transparent, you know about windows compositing right ?
+
+Okay so, you start to tell yourself that maybe drawing stuff is complicated. Let the implementors compiler writers and library vendors deal with all that crap. So you provide an API that works everywhere, so it handles absolutely nothing, which is to say it works nowhere.
+
+Now the compiler writers are a bit pissed. All they wanted in life was to write compilers and there they are, trying to understand how GDI work. Plus Microsoft is maybe not really interested in providing a drawing framework, they rather have their users use the WinRT xml-based tools. Meanwhile the GCC guys are still trying to have std::thread work on windows.
+
+Clang people get bug reports that “it doesn’t work”. People have expectations that the STL will work perfectly, consistently, anywhere
+
+No problem. We will make the graphics library optional. So now there are bits of the Standard Library that are not standard. If and when they are implemented, they don’t behave quite the same on every platform. So now the code written using standard tools is not portable. So we need to have a copy of the STL in the repository along with messy build scripts. Back to square one.
+
+Maybe we messed up somewhere? Let’s look at what exists on Internet. People have displays so surely they do write libraries for them, right ?
+
+Turns out Qt is pretty popular. It does a lot more than displaying triangle though. It was released in 1995. It has strings, threads, tons of stuffs. People really did not came up with anything better since ?
+
+wxWidgets is even older. It too has strings and threads and a lot of things that don’t have business being in a graphic library. GTK is the exact same thing.
+
+But C++ goals are more aligned with things like SDL. Released in 1995 with threads and strings and weird things. Allegro, released in 1990. Same thing
+
+You look at other languages. Surely the Rust community has an awesome painting framework, right ? Or the Go people ? Turns out they write wrappers around Qt, or SDL or something, like they deemed to complicated to start from scratch.
+
+So 20 years later you manage to draw a triangle on all platforms. For some definition of all.
+
+<!-- End text dump from Corentin's blog. Needs to be cleaned up. -->
 
 **TODO**
 
@@ -118,6 +165,20 @@ There are some **portability pain points** that graphics programmers experience 
 **TODO: Linear Algebra (how might the HPC community feel about graphics people designing these types)**
 
 ## Committee Resources are Limited
+
+Committee resources and time are limited.
+Thus, we must prioritize and even discard proposals either explicitly, or implicitly by never giving them time.
+Directions for ISO C++ (**TODO: Add Paper Number**) attempts to describes how that sorting and prioritizing should happen.
+
+The question then becomes: can the committee spares the time to work on a 2D graphics library and is that a priority?
+
+In its current form, the proposal, which is limited to drawing shapes, is about 150 pages long. It's one of the largst proposals currently in flight.
+
+At the Jacksonville 2018 meeting, during the LEWG discussion of this proposal, a library implementor with ample experience in LWG estimated that it would take the equivalent of an entire meeting of LWG's time to get the proposal out for a Technical Specification. 
+Assuming that estimate is roughly accurate, it indicates a substantial resource investment.
+We only have nine meetings in between each International Standard.
+Approximately two to three of those meetings get spent on ballot resolution, leaving about six meetings for feature development.
+Are we comfortable spending 1/6th of an International Standard development cycle on this proposal?
 
 # Alternative Proposal
 
