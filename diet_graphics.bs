@@ -1,0 +1,174 @@
+<pre class='metadata'>
+Title: Diet Graphics
+Abstract: The proposed 2D graphics library is not a good fit for C++.
+Shortname: D1062
+Revision: 0
+Audience: WG21
+Status: D
+Group: WG21
+URL: http://wg21.link/P1062r0
+Editor: Bryce Adelstein Lelbach, NVIDIA, brycelelbach@gmail.com
+Editor: Olivier Giroux, NVIDIA, ogiroux@nvidia.com
+Editor: Corentin Jabot, corentinjabot@gmail.com
+Date: 2018-05-07
+Markup Shorthands: markdown yes
+</pre>
+
+# Goals
+
+Before we dive into the details, let's take a step back and discuss **why** some on the committee have a desire to standardize a C++ 2D graphics library.
+
+A common criticism of C++ is that the C++'s standard library is not as rich as the core libraries of other languages such as Java, Python, Javascript, Rust, Swift, etc.
+For example, C++ does not have:
+
+* A Unicode text library.
+* A HTML library.
+* A JSON library.
+* Database libraries.
+* **TODO**
+
+There are, of course, many high-quality 3rd party C++ libraries that provide these features.
+But, C++ also lacks a standard build system, packing system and a centralized source of packages.
+This can make it notably more difficult to start using, say, a 3rd party 2D graphics library in C++.
+
+This is something of a barrier to entry for new C++ programmers and a teaching challenge to educators.
+**TODO: More words about why graphics is helpful for teaching.**
+
+There are many professional graphics programmers and who use C++, so it is natural for the committee to consider ways to help them.
+Many of these users work with professional graphics standards and frameworks such as OpenGL, Vulkan, **TODO: Other examples**.
+Graphics is a vast domain filled with a multitude different formalisms and techniques. 
+To provide professional graphics programmers with the tools they need, graphics frameworks often have extensive and broad APIs - even just for 2D graphics.
+These APIs are low level, providing professional graphics programmers with the abstractions they need to build their software.
+**TODO: Sentence about why domain-specific frameworks are complex.**
+For a standard C++ 2D graphics library to be useful to professional graphics programmers, it would have to be as extensive, broad and efficient as established graphics standards and APIs.
+This is the source of the size and complexity of the proposed C++ 2D graphics library.
+
+Some have suggested that professional graphics programmers would use the proposed C++ 2D graphics library.
+Based on the author's collective knowledge of the graphics community, we strongly believe this statement is not true.
+Game/computer vision/visualization/etc developers are not going to use the proposed library.
+**TODO: Summary of why.** 
+
+We cannot and should not hope to standardize a comprehensive 2D graphics framework suitable for use in production applications.
+Due to the size and complexity of such an interface, we would need to invest a significant amount of committee resources to build one. 
+More importantly, there's no demand for one.
+**Graphics has its own standards, and professional graphics programmers don't want us to make another one.**
+
+We believe that the issues with the proposed C++ 2D graphics library are due to conflicting goals:
+
+0.) It is intended to be a **high-level simple interface** that is easy for non-experts to use and makes C++ more teachable.
+1.) It is intended to be a **low-level complex interface** for professional graphics programmers.
+
+We believe that second goal is an anti-goal.
+There is no demand for it from the graphics community and we lack the core competency and resources to execute on it.
+
+An example is illustrative of the conflict:
+
+<table border=1>
+  <tr>
+    <th>What We Have: A Low Level API (P0267r7)</th>
+    <th>What We Want: A High Level API</th>
+  </tr>
+  <tr>
+    <td>
+```
+// TODO: How to draw a triangle with the current proposal.
+```
+    </td>
+    <td>
+```
+// TODO: How to draw a triangle with Olivier's design. Perhaps assume we have some `std::triange_asset` helper  
+```
+    </td>
+  </tr>
+</table>
+
+**TODO: List some examples of low level stuff in the proposed API that non-experts shouldn't have to care about.**
+
+We propose that the following goals should be adopted for a standard C++ 2D graphics API.
+
+* **Designed for Non-Experts:**
+* **High Level Interface:**
+* **Leverage Established Graphics Standards :**
+* **Universally Portable:**
+* **Minimal and Simple Interface:**
+* **Leave Room for Efficiency:**
+
+<!-- TODO: Less harsh name for this -->
+# Current Design Flaws
+
+## How do I get a Window?
+
+There are some **portability pain points** that graphics programmers experience today that we could help solve.
+
+**TODO**
+
+## Efficiency
+
+**TODO: `double` everywhere!**
+**TODO**
+
+## TODO: Other Issues
+
+## Scope is Broader than just 2D Graphics
+
+**TODO: Text/Unicode**
+
+**TODO: Geometry**
+
+**TODO: Linear Algebra (how might the HPC community feel about graphics people designing these types)**
+
+## Committee Resources are Limited
+
+# Alternative Proposal
+
+If the committee feels strongly that a 2D Graphics library is a high priority, we suggest a minimal design with a thin interface.
+**TODO: Description of the design, links to some prior art (preferrably some non-NVIDIA stuff too)**
+
+```
+namespace std { namespace graphics {
+  struct display_exception;
+
+  struct asset {
+    explicit asset(string const& xml);
+    explicit asset(filesystem::path const& file);
+    ~asset();
+  };
+
+  template<class Function>
+  static void process_events(double timeout, Function f);
+
+  template<class T>
+  struct point { T x, y; };
+
+  template<class T>
+  struct rectangle { point<T> top_left, bottom_right; };
+
+  struct window {
+    window(rectangle<int> = {}, string const& title = "");
+    ~window();
+
+    void on_key_down(function<void(int /*key code*/)> action);
+    void on_key_up(function<void(int /*key code*/)> action);
+    void on_pointer_pos(function<void(float /*normalized x*/, float /*normalized y*/)> action);
+    void on_pointer_down(function<void(int /*button code*/)> action);
+    void on_pointer_up(function<void(int /*button code*/)> action);
+
+    void on_draw(function<void()> action);
+    void on_close(function<void()> action);
+    void on_place(function<void(rectangle<int>/*display subrect*/)> action);
+
+    void place(rectangle<int>);
+    void redraw();
+    bool closed() const;
+
+    void clear();
+    void apply(asset const& a, rectangle<float> /*window subrect*/);
+
+    using native_handle_type = implementation-defined;
+    native_handle_type native_handle();
+  };
+} }
+```
+
+**TODO: Olivier should add some words describing how things work.**
+
