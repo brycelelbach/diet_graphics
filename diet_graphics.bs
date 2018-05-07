@@ -28,7 +28,7 @@ The authors of [[P0267r7]], SG13, and everyone else who has worked on the propos
 We, the authors of this paper, greatly appreciate their contributions to C++.
 We also greatly value them, personally, as they are simply excellent people.
 
-This paper difficult to write, because we have no intention to malign their hard work.
+This was paper difficult to write, because we have no intention to malign their hard work.
 
 We do not have a negative opinion of the particular library in question.
 We do, however, question whether it should be included in the C++ International Standard.
