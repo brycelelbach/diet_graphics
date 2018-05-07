@@ -23,13 +23,13 @@ We'd like to acknowledge:
 * Michael Spencer and Billy Baker, who provided invaluable feedback at a bar.
 * Everyone involved in the discussion of [[P0267r7]] at the Jacksonville 2018 meeting.
 
-# Foreward
+# Foreword
 
 The authors of [[P0267r7]], SG13, and everyone else who has worked on the proposed 2D drawing Technical Specification, have put a great amount of work, time and energy in that proposal. 
 We, the authors of this paper, greatly appreciate their contributions to C++.
 We also greatly value them, personally, as they are simply excellent people.
 
-This was paper difficult to write, because we have no intention to malign their hard work.
+This paper was difficult to write, because we have no intention to malign their hard work.
 
 We do not have a negative opinion of the particular library in question.
 We do, however, question whether it should be included in the C++ International Standard.
@@ -51,7 +51,7 @@ A few different use cases have been espoused during the lifetime of this proposa
 ## Teaching
 
 Some of the motivation behind [[P0267r7]] is a desire to provide a powerful teaching tool for C++.
-For new programmers, especially younger programmers, writing command line applications may not be particularly intuitive or exciting
+For new programmers, especially younger programmers, writing command-line applications may not be particularly intuitive or exciting.
 Being able to see and interact with your code is far more natural.
 Building graphical applications can help the student connect the code they are writing to the real world.
 After all, most non-programmers primarily interact with software that has a graphical interface of some sort.
@@ -96,13 +96,13 @@ If one was to design a curriculum around this proposal, students would have to l
 Our goal is for students to learn C++ programming; graphics should be a teaching aid, not the main focus.
 
 We question whether a drawing library would be a useful teaching aid.
-It seems like a simple facility for building graphical interfaces that supports and leverages established graphics standards and formats and allows programmers can use common image editing tools to generate art assets instead of having to express them programmatically in C++.
+A simple facility for building graphical interfaces that supports and leverages established graphics standards and formats would allow programmers to use common image editing tools to generate art assets instead of having to express them programmatically in C++.
  
 ## Enabling Graphics Programming
 
 There are two classes of graphics programmers:
 
-* **Graphical Application Developers (Non-Experts)** build graphics applications, such as games. They are mainly concerned with developing application logic that manipulates graphics asset but they do not typically programmatically build their assets with lower-level drawing interfaces. The assets they work with are developed in common formats such as Postscript or SVG by either the graphical application developers, artists that they collaborate with, databases, etc.
+* **Graphical Application Developers (Not Always Experts)** build graphics applications, such as games. They are mainly concerned with developing application logic that manipulates graphics asset but they do not typically programmatically build their assets with lower-level drawing interfaces. The assets they work with are developed in common formats such as Postscript or SVG by either the graphical application developers, artists that they collaborate with, asset banks, etc.
 * **Graphical Framework Developers (Experts)** build graphics frameworks, engines, and libraries that graphical application developers use.
 
 Naturally, there are many more graphical application developers than there are framework developers.
@@ -112,7 +112,7 @@ Naturally, there are many more graphical application developers than there are f
 Graphical application developers are application programmers who build (usually interactive) software which displays visual output.
 Some examples include games, cartography software, and scientific visualization.
 Most graphical application developers do not regularly produce the art assets they use programmatically.
-Instead, they consume assets produces upstream by artists, taken from databases, etc.
+Instead, they consume assets produces upstream by artists, taken from asset banks, etc.
 
 A common concern when graphical application developers decide which APIs to use is what their **asset toolchain** will be - e.g. what tools will generate or what sources will provide the art content.
 Graphical application programmers are going to be inclined to use APIs that don't require explicit conversion, or worse - require them to write the conversion code themselves.
@@ -124,7 +124,7 @@ What would attract them to [[P0267r7]] over the established alternatives?
 
 Now let's talk about the expert graphics programmers who are building graphics libraries and frameworks, which graphical application developers use.
 Those graphical application developers want to pass the assets they created in existing established formats, such as Postscript or SVG.
-For the frameworks to use the current proposed API, they would have to convert those assets to the proposed ath representation.
+For the frameworks to use the current proposed API, they would have to convert those assets to the proposed path representation.
 This would be unnecessary and inefficient, because the lower level APIs that [[P0267r7]] would be built on top of probably support those formats natively.
 Additionally, since the proposed API is not as extensive as SVG or Postscript, some things will not be easily expressible using the proposed TS path representation.
 Suppose we create an asset in SVG using a type of arc that SVG natively supports but [[P0267r7]] does not.
@@ -191,7 +191,7 @@ P0267r7's current model will largely prevent an efficient GPU implementation.
 
 ## Text and Unicode
 
-[[N3791]], the paper that began work on the proposed drawing library, it was stated that the library should be able to draw text.
+In [[N3791]], the paper that began work on the proposed drawing library, it was stated that the library should be able to draw text.
 
 The current proposal, [[P0267r7]], has a section on text rendering and display.
 The section in it's entirety is reproduced below:
@@ -368,7 +368,7 @@ namespace std::graphics {
   };
 
   struct window {
-    window(rectangle<int> = {}, string const& title = "");
+    window(rectangle<int> rect = {}, string const& title = "");
     ~window();
 
     void on_key_down(function<void(int /*key code*/)> action);
@@ -377,16 +377,13 @@ namespace std::graphics {
     void on_pointer_down(function<void(int /*button code*/)> action);
     void on_pointer_up(function<void(int /*button code*/)> action);
 
-    void on_draw(function<void()> action);
+    void on_draw(function<void(surface&/*render target*/)> action);
     void on_close(function<void()> action);
     void on_place(function<void(rectangle<int>/*display subrect*/)> action);
 
-    void place(rectangle<int>);
+    void place(rectangle<int> rect);
     void redraw();
     bool closed() const;
-
-    void clear();
-    void apply(asset const& a, rectangle<float> /*window subrect*/);
 
     using native_handle_type = implementation-defined;
     native_handle_type native_handle();
@@ -400,7 +397,8 @@ Objects of class `asset` encapsulate a W3C SVG graph. Constructors are provided 
 The free-function `process_events` shall be invoked in the main thread, and repeatedly executes the following steps:
 1.) Blocks waiting for the next window event, or until `timeout` seconds have elapsed.
 2.) Processes all available window events.
-3.) Invokes f.
+3.) Invokes `f`, it shall be `Callable` with no arguments and return `bool`.
+4.) If `f` returned false, `process_events` returns.
 
 Objects of class `window` encapsulate implementation-defined display windows. A display window is user-visible rectangular grid of pixels that can be the target of user interaction events, such typing, pointing, moving, resizing and closing.
 
@@ -421,23 +419,25 @@ An example:
 ```
 #include <graphics>
 
+template<class T>
+using rectangle = std::graphics::rectangle<T>;
 using asset = std::graphics::asset;
 using window = std::graphics::window;
+using surface = std::graphics::surface;
 
 int main() {
-  window w(600,600);
 
-  asset const a{my_asset_string};
+  window w(rectangle<int>{{0,0},{600,600}});
 
-  w.on_draw = [&]() {
-    w.clear();
-    w.apply(a);
-  };
-
-  window::process_events(1.0/60, [&](){
+  asset const a{ my_asset_string_here };
+  w.on_draw([&](surface& s) {
+    s.clear();
+    s.apply(a, rectangle<float>{{0.f,0.f},{1.f,1.f}});
+  });
+  window::process_events(1./60, [&](){
     if (w.closed())
       return false;
-    w.draw();
+    w.redraw();
     return true;
   });
 }
