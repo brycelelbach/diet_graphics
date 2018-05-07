@@ -18,84 +18,112 @@ Markup Shorthands: markdown yes
 
 Before we dive into the details, let's take a step back and discuss **why** some on the committee have a desire to standardize a C++ 2D graphics library.
 
-A common criticism of C++ is that the C++'s standard library is not as rich as the core libraries of other languages such as Java, Python, Javascript, Rust, Swift, etc.
-For example, C++ does not have:
+A few different use cases have been identified:
 
-* A Unicode text library.
-* A HTML library.
-* A JSON library.
-* Database libraries.
-* **TODO**
+* Improving the teachability of C++.
+* Providing graphics programmers with a standard 2D graphics API.
 
-There are, of course, many high-quality 3rd party C++ libraries that provide these features.
-But, C++ also lacks a standard build system, packing system and a centralized source of packages.
-This can make it notably more difficult to start using, say, a 3rd party 2D graphics library in C++.
+## Teaching
 
-This is something of a barrier to entry for new C++ programmers and a teaching challenge to educators.
-**TODO: More words about why graphics is helpful for teaching.**
+Some of the motivation behind the proposed C++ 2D graphics interface is a desire to provide a powerful teaching tool for C++.
+For new programmers, especially younger programmers, writing command line applications may not be particularly intuitive or exciting
+Being able to see and interact with your code is far more natural.
+Building graphical applications can help the student connect the code they are writing to the real world.
+After all, most non-programmers primarily interact with software that has a graphical interface of some sort.
+
+We agree that this is a goal that C++ should pursue.
+However, we believe that the proposed C++ 2D graphics interface does not facilitate teaching.
+
+Let's consider an example. Suppose you are teaching a group of teenagers with no programming experience how to program in C++.
+There are a number of common starting points for young programmers, such as robotics, but let's consider the one that is likely most popular: building a simple game.
+
+Suppose we want our students to start by building a simple animation (later, we'll add keyboard input in to make it a game) where a single character moves around on a 2D screen.
+
+Where do we start?
+
+* First, they need to get a window, and a surface in that window that they can draw in.
+* Then, they need to programmatically place the character sprite on the screen at some starting position. The character sprite could be represented as an instance of a class type, whose constructor puts it in the starting position,
+* Next, they'll want to move the character sprite around by progamtically updating its position and redrawing the screen. This could be done by adding methods to the character sprite class: `move_left`, `move_right`, `move_up`, `move_down`, etc.
+
+Eventually, we'd want to replace the static animation with movement based on keyboard input.
+Then we would add other sprites (other characters, obstacles, etc) and game logic for how they would interact.
+
+What we're doing in this curriculum is **teaching programming in C++ using graphics**.
+
+This is not something that the proposed C++ 2D graphics interfaces enables.
+The proposed C++ 2D graphics interface gives you a mechanism to **programmatically draw graphics using C++".
+For example, you could programmatically draw the character sprite in the above example.
+
+But, why would you want to have students do this?
+The drawing of the character is not what we want to focus on; instead we want to build application logic that programmatically manipulates different objects (**assets**) on a surface.
+Instead of drawing assets programmatically in C++, we could have the students use an image editting tool to create an image (JPG, SVG, etc) to use as their sprite.
+
+Drawing even simple images with the proposed C++ 2D graphics library is verbose and thus distracting.
+If one was to design a curriculum around this proposal, students will have to learn a lot about computer graphics.
+Our goal is for students to learn C++ programming; graphics should be a teaching aid, not the main focus.
+
+For a C++ 2D graphics library to be a powerful teaching aid, it should be simple, easy to use.
+It should support and leverage established graphics standards and formats, so that programmers can use common image editting tools to generate art assets instead of having to express them programmatically in C++.
+ 
+## Enabling Graphics Programmers
 
 There are many professional graphics programmers and who use C++, so it is natural for the committee to consider ways to help them.
-Many of these users work with professional graphics standards and frameworks such as OpenGL, Vulkan, **TODO: Other examples**.
-Graphics is a vast domain filled with a multitude different formalisms and techniques. 
-To provide professional graphics programmers with the tools they need, graphics frameworks often have extensive and broad APIs - even just for 2D graphics.
-These APIs are low level, providing professional graphics programmers with the abstractions they need to build their software.
-**TODO: Sentence about why domain-specific frameworks are complex.**
-For a standard C++ 2D graphics library to be useful to professional graphics programmers, it would have to be as extensive, broad and efficient as established graphics standards and APIs.
-This is the source of the size and complexity of the proposed C++ 2D graphics library.
+
+There are two classes of graphics programmers:
+
+* **Graphical Application Developers (Non-Experts)** build graphics applications, such as games. They are mainly concerned with developing application logic that manipulates graphics asset but not programmatically building the assets. The assets they work with are developed using an **asset toolchain** that generates assets in common formats such as Postscript or SVG by either the graphical application developers or artists that they collaborate with.
+* **Graphical Framework Developers (Experts)** build graphics frameworks, engines, and libraries that graphical applicaiton developers use.
+
+Naturally, there are many more graphical application developers than there are framework developers.
+
+### Graphical Application Developers
+
+Graphical application developers are application programmers who build (usually interactive) software which displays visual output.
+Some examples of graphical games, cartography software, **TODO: More examples**. 
+Most graphical application developers do not produce the art assets they use.
+
+**TODO: Expand on graphical application developer lifestyle more. How games are build - you develop your assets in some tool, then you write the game logic that manipulates them.**
+
+A common concern when deciding which APIs to use is what the **asset toolchain** will be - e.g. what tools will the artists be using and what format will the assets they produce be in.
+Graphical application programmers are going to be inclined to use APIs that don't require explicit conversion, or worse - require them to write the conversion code themselves.
+
+### Graphics Experts
+
+Now let's talk about the expert graphics programmers who are building graphics libraries and frameworks, which graphical application developers use.
+Those graphical application developers want to pass the assets they created in existing established foramts, such as Postscript or SVG.
+For the frameworks to use the current proposed API, they would have to convert those assets to the proposed ath representation.
+This would be unnecessary and inefficient, because the lower level APIs that the TS would be built on top of support those formats natively.
+Additionally, since the proposed API is not as extensive as SVG or Postscript, some things will not be easily expressible using the proposed TS path representation.
+Suppose we create an asset in SVG using some exotic arc type that SVG natively supports but the proposed TS does not (**TODO EXAMPLE**).
+You would have to figure out how to map that primitive to the proposed TS path representation. 
 
 Some have suggested that professional graphics programmers would use the proposed C++ 2D graphics library.
 Based on the author's collective knowledge of the graphics community, we strongly believe this statement is not true.
 Game/computer vision/visualization/etc developers are not going to use the proposed library.
-**TODO: Summary of why.** 
 
-We cannot and should not hope to standardize a comprehensive 2D graphics framework suitable for use in production applications.
-Due to the size and complexity of such an interface, we would need to invest a significant amount of committee resources to build one. 
-More importantly, there's no demand for one.
+<!-- **TODO: Summary of why.** -->
+
+It's like we're developing a new (programmatic) asset format (the proposed path representation, etc) - and no one asked for that!
 **Graphics has its own standards, and professional graphics programmers don't want us to make another one.**
 
 We believe that the issues with the proposed C++ 2D graphics library are due to conflicting goals:
 
-0.) It is intended to be a **high-level simple interface** that is easy for non-experts to use and makes C++ more teachable.
-1.) It is intended to be a **low-level complex interface** for professional graphics programmers.
+0.) It is intended to be a **high-level simple interface** that is easy for non graphics programmers to use and makes C++ more teachable.
+1.) It is intended to be a **low-level complex interface** for graphics programmers.
 
 We believe that second goal is an anti-goal.
-There is no demand for it from the graphics community and we lack the core competency and resources to execute on it.
-
-An example is illustrative of the conflict:
-
-<table border=1>
-  <tr>
-    <th>What We Have: A Low Level API (P0267r7)</th>
-    <th>What We Want: A High Level API</th>
-  </tr>
-  <tr>
-    <td>
-```
-// TODO: How to draw a triangle with the current proposal.
-```
-    </td>
-    <td>
-```
-// TODO: How to draw a triangle with Olivier's design. Perhaps assume we have some `std::triange_asset` helper  
-```
-    </td>
-  </tr>
-</table>
-
-**TODO: List some examples of low level stuff in the proposed API that non-experts shouldn't have to care about.**
 
 We propose that the following goals should be adopted for a standard C++ 2D graphics API.
 
-* **Designed for Non-Experts:**
-* **High Level Interface:**
-* **Leverage Established Graphics Standards :**
+* **Leverage Established Graphics Standards Instead of Creating Our Own:**
 * **Universally Portable:**
-* **Minimal and Simple Interface:**
+* **Minimal Interface:**
 * **Leave Room for Efficiency:**
 
 <!-- TODO: Less harsh name for this -->
 # Current Design Flaws
 
+<!--
 ## How do I get a Window?
 
 There are some **portability pain points** that graphics programmers experience today that we could help solve.
@@ -144,15 +172,75 @@ But C++ goals are more aligned with things like SDL. Released in 1995 with threa
 You look at other languages. Surely the Rust community has an awesome painting framework, right ? Or the Go people ? Turns out they write wrappers around Qt, or SDL or something, like they deemed to complicated to start from scratch.
 
 So 20 years later you manage to draw a triangle on all platforms. For some definition of all.
-
-<!-- End text dump from Corentin's blog. Needs to be cleaned up. -->
-
-**TODO**
+-->
 
 ## Efficiency
 
-**TODO: `double` everywhere!**
-**TODO**
+<!-- 
+
+## Efficiency
+
+You will never get decent efficiency out of this API because the current design prohibits an implementation that would utilize GPUs.
+The current API would force frequent
+
+Let's say we want to render a tiger. This is a complex image consisting of a variety of different paths that get stroked and filled in different colors.
+
+The current design of the API would make this difficult to render on a GPU because 
+
+Suppose I want to render a path with a certain render and a certain stroke
+
+According to Mark Kilgard:
+
+TS path == path command
+TS path group (maybe now figure) == path
+TS path_builder == buffer of paths
+
+path has one stroke/fill associated with it.
+
+```
+auto sfc = make_image_surface();
+
+path_builder pb{};
+
+pb.new_figure({ 0.0f, 0.0f });
+pb.line({ 20.0f, 10.0f });
+pb.close_figure({ 0.0f, 0.0f });
+
+sfc.stroke(brush, pb, nullopt, stroke_props{ 10.0f }, nullopt, alised);
+
+pb.new_figure({ 0.0f, 0.0f });
+pb.line({ 20.0f, 10.0f });
+pb.close_figure({ 0.0f, 0.0f });
+
+sfc.stroke(brush, pb, nullopt, stroke_props{ 10.0f }, nullopt, alised);
+```
+
+```
+enum path_command {};
+
+std::vector<path_commands> pc(M);
+std::vector<path>          p(N);
+std::vector<strokes>       s(N); // Color, end caps, dashed or not
+std::vector<fills>         f(N); // Gradient, texture
+
+// Turn this into one contiguous sequence of path commands:
+//
+// p[0] (start of path 0)
+// p[1]
+// p[2] (start of path 1)
+// p[3]
+// p[4] (start of path 2)
+// p[5]
+```
+
+**TODO: Everything should be parameterized and bufferable**
+
+**TODO: This is retained mode.**
+
+The proposed C++ 2D graphics interface is largely an **immediate mode** interface.
+
+However, `path_builder` is retained mode. People will want a batching mechanism that isn't retained.
+-->
 
 ## TODO: Other Issues
 
