@@ -189,9 +189,15 @@ Given that the committee does not have infinite time, and given that there is hi
 
 ## What Belongs in The Standard?
 
-# Alternative Proposal
+# Suggestions
 
-If the committee feels strongly that a 2D Graphics library is a high priority, we suggest a minimal design with a thin interface:
+* **The C++ committee should not pursue a 2D vector drawing library at this time.** 
+* **Text, Unicode, geometry and linear algebra libraries are prerequisites of a vector drawing library that seem reasonable to consider for standardization.**
+* **We, the leaders of the C++ community, need to get serious about package management (not necessarily within the confines of standard).**
+
+# Alternative Minimal Graphics Proposal
+
+If the committee feels strongly that we want prioritize a ***minimal** 2D vector graphics library that gives you a portable way to get a window, load assets of an established vector graphics format,and display them on a surface in the window, we suggest the following minimal design and thin interface:
 
 ```
 namespace std { namespace graphics {
