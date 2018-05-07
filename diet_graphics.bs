@@ -124,11 +124,11 @@ What would attract them to [[P0267r7]] over the established alternatives?
 
 Now let's talk about the expert graphics programmers who are building graphics libraries and frameworks, which graphical application developers use.
 Those graphical application developers want to pass the assets they created in existing established formats, such as Postscript or SVG.
-For the frameworks to use the current proposed API, they would have to convert those assets to the proposed ath representation.
+For the frameworks to use the current proposed API, they would have to convert those assets to the [[P0267r7]] path representation.
 This would be unnecessary and inefficient, because the lower level APIs that [[P0267r7]] would be built on top of probably support those formats natively.
-Additionally, since the proposed API is not as extensive as SVG or Postscript, some things will not be easily expressible using the proposed TS path representation.
+Additionally, since the proposed API is not as extensive as SVG or Postscript, some things will not be easily expressible with [[P0267r7]].
 Suppose we create an asset in SVG using a type of arc that SVG natively supports but [[P0267r7]] does not.
-You would have to figure out how to map that primitive to the proposed TS path representation. 
+You would have to figure out how to map that primitive to the [[P0267r7]] primitives.
 
 Some have suggested that professional graphics programmers would use the proposed 2D drawing library.
 Based on the author's collective knowledge of the graphics community, we strongly believe this statement is not true.
