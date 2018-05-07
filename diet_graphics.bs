@@ -191,8 +191,7 @@ Given that the committee does not have infinite time, and given that there is hi
 
 # Alternative Proposal
 
-If the committee feels strongly that a 2D Graphics library is a high priority, we suggest a minimal design with a thin interface.
-**TODO: Description of the design, links to some prior art (preferrably some non-NVIDIA stuff too)**
+If the committee feels strongly that a 2D Graphics library is a high priority, we suggest a minimal design with a thin interface:
 
 ```
 namespace std { namespace graphics {
@@ -212,6 +211,11 @@ namespace std { namespace graphics {
 
   template<class T>
   struct rectangle { point<T> top_left, bottom_right; };
+
+  struct surface {
+    void clear();
+    void apply(asset const& a, rectangle<float> /*window subrect*/);
+  };
 
   struct window {
     window(rectangle<int> = {}, string const& title = "");
@@ -240,5 +244,25 @@ namespace std { namespace graphics {
 } }
 ```
 
-**TODO: Olivier should add some words describing how things work.**
+Objects of class `asset` encapsulate a W3C SVG graph. Constructors are provided that consume strings and files, which shall be text representations of the graph in the W3C SVG XML format. Much like objects of class `regex`, these can be parsed once and used often, to amortize the cost of constructing the graph. [ Note: Objects of class `asset` are akin to sprites. – End note ]
 
+The free-function `process_events` shall be invoked in the main thread, and repeatedly executes the following steps:
+1.) Blocks waiting for the next window event, or until `timeout` seconds have elapsed.
+2.) Processes all available window events.
+3.) Invokes f.
+
+Objects of class `window` encapsulate implementation-defined display windows. A display window is user-visible rectangular grid of pixels that can be the target of user interaction events, such typing, pointing, moving, resizing and closing.
+
+The constructor `window::window` creates a visible display window with suggested screen footprint `rect` in pixels, and suggested name title. Implementations should ensure that these parameters are respected, if possible. The member functions have the following semantics:
+
+* The member functions `window::on_*` set the event handler for different event. Each takes a `Callable` operand that replaces the previous handler, if any. [ *Note:* The only way to draw on a display window is by registering a handler with `on_draw`, in order to get access to a surface object. – *end note* ]
+* The member function `window::place` raises a place event on the window, with suggested screen footprint `rect`.
+* The member function `window::redraw` raises a draw event on the window. [ *Note:* This causes the handler registered with `on_draw` to eventually execute. – *end note* ]
+* The member function `window::closed` returns true if the display window has been closed.
+* The member function `window::native_handle` returns an object of type `native_handle_type` suitable for use with implementation-defined capabilities, such as advanced rendering capabilities. Implementations may require that no operation to the display window be performed through the `native_handle` once any operation has been performed through a `surface` object.
+
+Objects of class `surface` encapsulate the rendering capabilities of a display window. A display window may only render objects of class `asset`, and only as an effect of executing a function registered with on_draw. A surface presents only two operations:
+* The member function `surface::clear` invalidates the contents of the display window. The meaning of this operation is implementation-defined.
+* The member function `surface::apply` renders an object of class asset with relative footprint `rect`.
+
+**TODO: Description of the design, links to some prior art (preferrably some non-NVIDIA stuff too)**
