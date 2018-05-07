@@ -10,6 +10,9 @@ Issue Tracking: GitHub https://github.com/brycelelbach/diet_graphics/issues
 URL: http://wg21.link/P1062r0
 Editor: Bryce Adelstein Lelbach, brycelelbach@gmail.com
 Editor: Olivier Giroux, ogiroux@gmail.com
+Editor: Zach Laine, whatwasthataddress@gmail.com
+Editor: Corentin Jabot, corentinjabot@gmail.com
+Editor: Vittorio Romeo, vittorio.romeo@outlook.com
 Date: 2018-05-07
 Markup Shorthands: markdown yes
 </pre>
@@ -18,8 +21,6 @@ Markup Shorthands: markdown yes
 
 We'd like to acknowledge:
 
-* Corentin Jabot, who wrote [an excellent blog article on the subject and gave us the okay to use parts of it](https://hackernoon.com/a-cake-for-your-cherry-what-should-go-in-the-c-standard-library-804fcecccef8).
-* Zach Laine, who provided feedback, ideas and his time. His knowledge and input was incredibly helpful.
 * Michael Spencer and Billy Baker, who provided invaluable feedback at a bar.
 * Everyone involved in the discussion of [[P0267r7]] at the Jacksonville 2018 meeting.
 
@@ -75,21 +76,21 @@ Suppose we want our students to start by building a simple animation (later, we'
 Where do we start?
 
 * First, they need to get a window, and a surface in that window that they can draw in.
-* Then, they need to programmatically place the character sprite on the screen at some starting position. The character sprite could be represented as an instance of a class type, whose constructor puts it in the starting position,
-* Next, they'll want to move the character sprite around by programmatically updating its position and redrawing the screen. This could be done by adding methods to the character sprite class: `move_left`, `move_right`, `move_up`, `move_down`, etc.
+* Then, they need to programmatically place the character on the screen at some starting position. The character could be represented as an instance of a class type, whose constructor puts it in the starting position,
+* Next, they'll want to move the character around by programmatically updating its position and redrawing the screen. This could be done by adding methods to the character class: `move_left`, `move_right`, `move_up`, `move_down`, etc.
 
 Eventually, we'd want to replace the static animation with movement based on keyboard input.
-Then we would add other sprites (other characters, obstacles, etc) and game logic for how they would interact.
+Then we would add other game entities (other characters, obstacles, etc) and game logic for how they would interact.
 
 What we're doing in this curriculum is **teaching programming in C++ using graphics**.
 
 This is not something that the proposed 2D drawing interface enables.
 [[P0267r7]] gives you a mechanism to **programmatically draw graphics using C++**.
-For example, you could programmatically draw the character sprite in the above example.
+For example, you could programmatically draw the character in the above example.
 
 But, why would you want to have students do this?
 The drawing of the character is not what we want to focus on; instead we want to build application logic that programmatically manipulates different objects (**assets**) on a surface.
-Instead of drawing assets programmatically in C++, we could have the students use an image editing tool to create an image (JPG, SVG, etc) to use as their sprite.
+Instead of drawing assets programmatically in C++, we could have the students use an image editing tool to create an image (JPG, SVG, etc) to use as their art asset.
 
 Drawing even simple images with a programmatic drawing interface will be verbose, and thus distracting from the core curriculum.
 If one was to design a curriculum around this proposal, students would have to learn a lot about computer graphics in addition to C++.
@@ -392,7 +393,7 @@ namespace std::graphics {
 }
 ```
 
-Objects of class `asset` encapsulate a W3C SVG graph. Constructors are provided that consume strings and files, which shall be text representations of the graph in the W3C SVG XML format. Much like objects of class `regex`, these can be parsed once and used often, to amortize the cost of constructing the graph. [ Note: Objects of class `asset` are akin to sprites. – End note ]
+Objects of class `asset` encapsulate a W3C SVG graph. Constructors are provided that consume strings and files, which shall be text representations of the graph in the W3C SVG XML format. Much like objects of class `regex`, these can be parsed once and used often, to amortize the cost of constructing the graph. [ Note: Objects of class `asset` are akin to figures. – End note ]
 
 The free-function `process_events` shall be invoked in the main thread, and repeatedly executes the following steps:
 1.) Blocks waiting for the next window event, or until `timeout` seconds have elapsed.
