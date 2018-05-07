@@ -1,6 +1,6 @@
 <pre class='metadata'>
 Title: Diet Graphics
-Abstract: The proposed 2D graphics library is not a good fit for C++.
+Abstract: The proposed programmatic 2D vector drawing library is not a good fit for C++.
 Shortname: D1062
 Revision: 0
 Audience: WG21
@@ -14,9 +14,13 @@ Date: 2018-05-07
 Markup Shorthands: markdown yes
 </pre>
 
+In this paper, we explain why we believe that P0267r7, "A Proposal to Add 2D Graphics Rendering and Display to C++" is not a good fit for C++.
+
+P0267r7 proposes a programmatic 2D vector drawing library: it provides programmatic C++ interfaces for drawing **vector art assets** by manipulating C++ objects and then displaying them on a surface.
+
 # Questionable Utility
 
-Before we dive into the details, let's take a step back and discuss **why** some on the committee have a desire to standardize a C++ 2D graphics library.
+Let's take a step back and discuss **why** some on the committee have a desire to standardize a C++ 2D graphics library.
 
 A few different use cases have been espoused during the lifetime of this proposal:
 
@@ -191,7 +195,7 @@ Given that the committee does not have infinite time, and given that there is hi
 
 # Suggestions
 
-* **The C++ committee should not pursue a 2D vector drawing library at this time.** 
+* **The C++ committee should not pursue a programmatic 2D vector drawing library at this time.** 
 * **Text, Unicode, geometry and linear algebra libraries are prerequisites of a vector drawing library that seem reasonable to consider for standardization.**
 * **We, the leaders of the C++ community, need to get serious about package management (not necessarily within the confines of standard).**
 
