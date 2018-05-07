@@ -6,6 +6,7 @@ Revision: 0
 Audience: WG21
 Status: D
 Group: WG21
+Issue Tracking: GitHub https://github.com/brycelelbach/diet_graphics/issues
 URL: http://wg21.link/P1062r0
 Editor: Bryce Adelstein Lelbach, brycelelbach@gmail.com
 Editor: Olivier Giroux, ogiroux@gmail.com
