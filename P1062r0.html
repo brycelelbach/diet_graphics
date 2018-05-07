@@ -1193,7 +1193,7 @@ Possible extra rowspan handling
   </style>
   <meta content="Bikeshed version 4ed3ee986a8d1722dd7c6bb819b1a2484c3cfb47" name="generator">
   <link href="http://wg21.link/P1062r0" rel="canonical">
-  <meta content="c70bde8f7cc007790eb3352d6d5875f374ab8819" name="document-revision">
+  <meta content="aad7f971609e373fbdd1c6d3fad779796fd21bfc" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1408,11 +1408,19 @@ pre .property::before, pre .property::after {
     <dl>
      <dt>This version:
      <dd><a class="u-url" href="http://wg21.link/P1062r0">http://wg21.link/P1062r0</a>
+     <dt>Issue Tracking:
+     <dd><a href="https://github.com/brycelelbach/diet_graphics/issues">GitHub</a>
      <dt>Authors:
      <dd>
       <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:brycelelbach@gmail.com">Bryce Adelstein Lelbach</a>
      <dd>
       <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:ogiroux@gmail.com">Olivier Giroux</a>
+     <dd>
+      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:whatwasthataddress@gmail.com">Zach Laine</a>
+     <dd>
+      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:corentinjabot@gmail.com">Corentin Jabot</a>
+     <dd>
+      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:vittorio.romeo@outlook.com">Vittorio Romeo</a>
      <dt>Audience:
      <dd>WG21
      <dt>Project:
@@ -1430,7 +1438,7 @@ pre .property::before, pre .property::after {
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
    <ol class="toc" role="directory">
     <li><a href="#acknowledgments"><span class="secno">1</span> <span class="content">Acknowledgments</span></a>
-    <li><a href="#foreward"><span class="secno">2</span> <span class="content">Foreward</span></a>
+    <li><a href="#foreword"><span class="secno">2</span> <span class="content">Foreword</span></a>
     <li>
      <a href="#utility"><span class="secno">3</span> <span class="content">Utility</span></a>
      <ol class="toc">
@@ -1470,19 +1478,15 @@ pre .property::before, pre .property::after {
    <p>We’d like to acknowledge:</p>
    <ul>
     <li data-md="">
-     <p>Corentin Jabot, who wrote <a href="https://hackernoon.com/a-cake-for-your-cherry-what-should-go-in-the-c-standard-library-804fcecccef8">an excellent blog article on the subject and gave us the okay to use parts of it</a>.</p>
-    <li data-md="">
-     <p>Zach Laine, who provided feedback, ideas and his time. His knowledge and input was incredibly helpful.</p>
-    <li data-md="">
      <p>Michael Spencer and Billy Baker, who provided invaluable feedback at a bar.</p>
     <li data-md="">
      <p>Everyone involved in the discussion of <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a> at the Jacksonville 2018 meeting.</p>
    </ul>
-   <h2 class="heading settled" data-level="2" id="foreward"><span class="secno">2. </span><span class="content">Foreward</span><a class="self-link" href="#foreward"></a></h2>
+   <h2 class="heading settled" data-level="2" id="foreword"><span class="secno">2. </span><span class="content">Foreword</span><a class="self-link" href="#foreword"></a></h2>
    <p>The authors of <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a>, SG13, and everyone else who has worked on the proposed 2D drawing Technical Specification, have put a great amount of work, time and energy in that proposal.
 We, the authors of this paper, greatly appreciate their contributions to C++.
 We also greatly value them, personally, as they are simply excellent people.</p>
-   <p>This paper difficult to write, because we have no intention to malign their hard work.</p>
+   <p>This paper was difficult to write, because we have no intention to malign their hard work.</p>
    <p>We do not have a negative opinion of the particular library in question.
 We do, however, question whether it should be included in the C++ International Standard.</p>
    <p>However, we feel obligated to share our technical perspective on <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a>.
@@ -1499,7 +1503,7 @@ In this paper, we explain why we believe that <a data-link-type="biblio" href="#
    </ul>
    <h3 class="heading settled" data-level="3.1" id="teaching"><span class="secno">3.1. </span><span class="content">Teaching</span><a class="self-link" href="#teaching"></a></h3>
    <p>Some of the motivation behind <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a> is a desire to provide a powerful teaching tool for C++.
-For new programmers, especially younger programmers, writing command line applications may not be particularly intuitive or exciting
+For new programmers, especially younger programmers, writing command-line applications may not be particularly intuitive or exciting.
 Being able to see and interact with your code is far more natural.
 Building graphical applications can help the student connect the code they are writing to the real world.
 After all, most non-programmers primarily interact with software that has a graphical interface of some sort.</p>
@@ -1520,28 +1524,28 @@ There are a number of common starting points, but let’s use the one that is li
     <li data-md="">
      <p>First, they need to get a window, and a surface in that window that they can draw in.</p>
     <li data-md="">
-     <p>Then, they need to programmatically place the character sprite on the screen at some starting position. The character sprite could be represented as an instance of a class type, whose constructor puts it in the starting position,</p>
+     <p>Then, they need to programmatically place the character on the screen at some starting position. The character could be represented as an instance of a class type, whose constructor puts it in the starting position,</p>
     <li data-md="">
-     <p>Next, they’ll want to move the character sprite around by programmatically updating its position and redrawing the screen. This could be done by adding methods to the character sprite class: <code class="highlight"><span class="n">move_left</span></code>, <code class="highlight"><span class="n">move_right</span></code>, <code class="highlight"><span class="n">move_up</span></code>, <code class="highlight"><span class="n">move_down</span></code>, etc.</p>
+     <p>Next, they’ll want to move the character around by programmatically updating its position and redrawing the screen. This could be done by adding methods to the character class: <code class="highlight"><span class="n">move_left</span></code>, <code class="highlight"><span class="n">move_right</span></code>, <code class="highlight"><span class="n">move_up</span></code>, <code class="highlight"><span class="n">move_down</span></code>, etc.</p>
    </ul>
    <p>Eventually, we’d want to replace the static animation with movement based on keyboard input.
-Then we would add other sprites (other characters, obstacles, etc) and game logic for how they would interact.</p>
+Then we would add other game entities (other characters, obstacles, etc) and game logic for how they would interact.</p>
    <p>What we’re doing in this curriculum is <strong>teaching programming in C++ using graphics</strong>.</p>
    <p>This is not something that the proposed 2D drawing interface enables. <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a> gives you a mechanism to <strong>programmatically draw graphics using C++</strong>.
-For example, you could programmatically draw the character sprite in the above example.</p>
+For example, you could programmatically draw the character in the above example.</p>
    <p>But, why would you want to have students do this?
 The drawing of the character is not what we want to focus on; instead we want to build application logic that programmatically manipulates different objects (<strong>assets</strong>) on a surface.
-Instead of drawing assets programmatically in C++, we could have the students use an image editing tool to create an image (JPG, SVG, etc) to use as their sprite.</p>
+Instead of drawing assets programmatically in C++, we could have the students use an image editing tool to create an image (JPG, SVG, etc) to use as their art asset.</p>
    <p>Drawing even simple images with a programmatic drawing interface will be verbose, and thus distracting from the core curriculum.
 If one was to design a curriculum around this proposal, students would have to learn a lot about computer graphics in addition to C++.
 Our goal is for students to learn C++ programming; graphics should be a teaching aid, not the main focus.</p>
    <p>We question whether a drawing library would be a useful teaching aid.
-It seems like a simple facility for building graphical interfaces that supports and leverages established graphics standards and formats and allows programmers can use common image editing tools to generate art assets instead of having to express them programmatically in C++.</p>
+A simple facility for building graphical interfaces that supports and leverages established graphics standards and formats would allow programmers to use common image editing tools to generate art assets instead of having to express them programmatically in C++.</p>
    <h3 class="heading settled" data-level="3.2" id="enabling-graphics-programming"><span class="secno">3.2. </span><span class="content">Enabling Graphics Programming</span><a class="self-link" href="#enabling-graphics-programming"></a></h3>
    <p>There are two classes of graphics programmers:</p>
    <ul>
     <li data-md="">
-     <p><strong>Graphical Application Developers (Non-Experts)</strong> build graphics applications, such as games. They are mainly concerned with developing application logic that manipulates graphics asset but they do not typically programmatically build their assets with lower-level drawing interfaces. The assets they work with are developed in common formats such as Postscript or SVG by either the graphical application developers, artists that they collaborate with, databases, etc.</p>
+     <p><strong>Graphical Application Developers (Not Always Experts)</strong> build graphics applications, such as games. They are mainly concerned with developing application logic that manipulates graphics asset but they do not typically programmatically build their assets with lower-level drawing interfaces. The assets they work with are developed in common formats such as Postscript or SVG by either the graphical application developers, artists that they collaborate with, asset banks, etc.</p>
     <li data-md="">
      <p><strong>Graphical Framework Developers (Experts)</strong> build graphics frameworks, engines, and libraries that graphical application developers use.</p>
    </ul>
@@ -1550,7 +1554,7 @@ It seems like a simple facility for building graphical interfaces that supports 
    <p>Graphical application developers are application programmers who build (usually interactive) software which displays visual output.
 Some examples include games, cartography software, and scientific visualization.
 Most graphical application developers do not regularly produce the art assets they use programmatically.
-Instead, they consume assets produces upstream by artists, taken from databases, etc.</p>
+Instead, they consume assets produces upstream by artists, taken from asset banks, etc.</p>
    <p>A common concern when graphical application developers decide which APIs to use is what their <strong>asset toolchain</strong> will be - e.g. what tools will generate or what sources will provide the art content.
 Graphical application programmers are going to be inclined to use APIs that don’t require explicit conversion, or worse - require them to write the conversion code themselves.</p>
    <p>Programmers developing graphical applications have many excellent options in 3rd party libraries, many of which have far greater capabilities than <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a>.
@@ -1558,11 +1562,11 @@ What would attract them to <a data-link-type="biblio" href="#biblio-p0267r7">[P0
    <h4 class="heading settled" data-level="3.2.2" id="graphical-framework-developers"><span class="secno">3.2.2. </span><span class="content">Graphical Framework Developers</span><a class="self-link" href="#graphical-framework-developers"></a></h4>
    <p>Now let’s talk about the expert graphics programmers who are building graphics libraries and frameworks, which graphical application developers use.
 Those graphical application developers want to pass the assets they created in existing established formats, such as Postscript or SVG.
-For the frameworks to use the current proposed API, they would have to convert those assets to the proposed ath representation.
+For the frameworks to use the current proposed API, they would have to convert those assets to the <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a> path representation.
 This would be unnecessary and inefficient, because the lower level APIs that <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a> would be built on top of probably support those formats natively.
-Additionally, since the proposed API is not as extensive as SVG or Postscript, some things will not be easily expressible using the proposed TS path representation.
+Additionally, since the proposed API is not as extensive as SVG or Postscript, some things will not be easily expressible with <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a>.
 Suppose we create an asset in SVG using a type of arc that SVG natively supports but <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a> does not.
-You would have to figure out how to map that primitive to the proposed TS path representation.</p>
+You would have to figure out how to map that primitive to the <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a> primitives.</p>
    <p>Some have suggested that professional graphics programmers would use the proposed 2D drawing library.
 Based on the author’s collective knowledge of the graphics community, we strongly believe this statement is not true.
 Game/computer vision/visualization/etc developers are not going to use the proposed library. <strong>Graphics has its own standards, and graphics programmers don’t want us to make another one.</strong></p>
@@ -1608,7 +1612,7 @@ sufficient as there is no mechanism for buffering strokes, fills, etc.</p>
 </pre>
    <p>P0267r7’s current model will largely prevent an efficient GPU implementation.</p>
    <h3 class="heading settled" data-level="4.2" id="text-and-unicode"><span class="secno">4.2. </span><span class="content">Text and Unicode</span><a class="self-link" href="#text-and-unicode"></a></h3>
-   <p><a data-link-type="biblio" href="#biblio-n3791">[N3791]</a>, the paper that began work on the proposed drawing library, it was stated that the library should be able to draw text.</p>
+   <p>In <a data-link-type="biblio" href="#biblio-n3791">[N3791]</a>, the paper that began work on the proposed drawing library, it was stated that the library should be able to draw text.</p>
    <p>The current proposal, <a data-link-type="biblio" href="#biblio-p0267r7">[P0267r7]</a>, has a section on text rendering and display.
 The section in it’s entirety is reproduced below:</p>
    <blockquote>
@@ -1741,7 +1745,16 @@ As leaders of the C++ community, it certainly is not.</p>
      <p><strong>We, the leaders of the C++ community, need to get serious about package management (not necessarily within the confines of standard).</strong></p>
    </ul>
    <h2 class="heading settled" data-level="7" id="alternative-minimal-graphics"><span class="secno">7. </span><span class="content">Alternative Minimal Graphics</span><a class="self-link" href="#alternative-minimal-graphics"></a></h2>
-   <p>If the committee feels strongly that we want prioritize a <strong>minimal</strong> 2D vector graphics library that gives you a portable way to get a window, load assets of an established vector graphics format,and display them on a surface in the window, we suggest the following minimal design and thin interface:</p>
+   <p>If the committee feels strongly that we want prioritize a <strong>minimal</strong> 2D vector graphics library that:</p>
+   <ul>
+    <li data-md="">
+     <p>Gives you a portable way to get a window</p>
+    <li data-md="">
+     <p>Loads assets in an established vector graphics format</p>
+    <li data-md="">
+     <p>Draws them on a surface in the window</p>
+   </ul>
+   <p>We suggest the following minimal design and thin interface:</p>
 <pre class="highlight"><span class="k">namespace</span> <span class="n">std</span><span class="o">::</span><span class="n">graphics</span> <span class="p">{</span>
 
   <span class="k">struct</span> <span class="n">display_exception</span><span class="p">;</span>
@@ -1767,7 +1780,7 @@ As leaders of the C++ community, it certainly is not.</p>
   <span class="p">};</span>
 
   <span class="k">struct</span> <span class="n">window</span> <span class="p">{</span>
-    <span class="n">window</span><span class="p">(</span><span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">></span> <span class="o">=</span> <span class="p">{},</span> <span class="n">string</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">title</span> <span class="o">=</span> <span class="s">""</span><span class="p">);</span>
+    <span class="n">window</span><span class="p">(</span><span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">></span> <span class="n">rect</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">string</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">title</span> <span class="o">=</span> <span class="s">""</span><span class="p">);</span>
     <span class="o">~</span><span class="n">window</span><span class="p">();</span>
 
     <span class="kt">void</span> <span class="nf">on_key_down</span><span class="p">(</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span> <span class="cm">/*key code*/</span><span class="p">)</span><span class="o">></span> <span class="n">action</span><span class="p">);</span>
@@ -1776,16 +1789,13 @@ As leaders of the C++ community, it certainly is not.</p>
     <span class="kt">void</span> <span class="nf">on_pointer_down</span><span class="p">(</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span> <span class="cm">/*button code*/</span><span class="p">)</span><span class="o">></span> <span class="n">action</span><span class="p">);</span>
     <span class="kt">void</span> <span class="nf">on_pointer_up</span><span class="p">(</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span> <span class="cm">/*button code*/</span><span class="p">)</span><span class="o">></span> <span class="n">action</span><span class="p">);</span>
 
-    <span class="kt">void</span> <span class="nf">on_draw</span><span class="p">(</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">></span> <span class="n">action</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">on_draw</span><span class="p">(</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">surface</span><span class="o">&amp;</span><span class="cm">/*render target*/</span><span class="p">)</span><span class="o">></span> <span class="n">action</span><span class="p">);</span>
     <span class="kt">void</span> <span class="nf">on_close</span><span class="p">(</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">></span> <span class="n">action</span><span class="p">);</span>
     <span class="kt">void</span> <span class="nf">on_place</span><span class="p">(</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">></span><span class="cm">/*display subrect*/</span><span class="p">)</span><span class="o">></span> <span class="n">action</span><span class="p">);</span>
 
-    <span class="kt">void</span> <span class="nf">place</span><span class="p">(</span><span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">></span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">place</span><span class="p">(</span><span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">></span> <span class="n">rect</span><span class="p">);</span>
     <span class="kt">void</span> <span class="nf">redraw</span><span class="p">();</span>
     <span class="kt">bool</span> <span class="nf">closed</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-
-    <span class="kt">void</span> <span class="nf">clear</span><span class="p">();</span>
-    <span class="kt">void</span> <span class="nf">apply</span><span class="p">(</span><span class="n">asset</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">></span> <span class="cm">/*window subrect*/</span><span class="p">);</span>
 
     <span class="k">using</span> <span class="n">native_handle_type</span> <span class="o">=</span> <span class="n">implementation</span><span class="o">-</span><span class="n">defined</span><span class="p">;</span>
     <span class="n">native_handle_type</span> <span class="nf">native_handle</span><span class="p">();</span>
@@ -1793,11 +1803,12 @@ As leaders of the C++ community, it certainly is not.</p>
 
 <span class="p">}</span>
 </pre>
-   <p>Objects of class <code class="highlight"><span class="n">asset</span></code> encapsulate a W3C SVG graph. Constructors are provided that consume strings and files, which shall be text representations of the graph in the W3C SVG XML format. Much like objects of class <code class="highlight"><span class="n">regex</span></code>, these can be parsed once and used often, to amortize the cost of constructing the graph. [ Note: Objects of class <code class="highlight"><span class="n">asset</span></code> are akin to sprites. – End note ]</p>
-   <p>The free-function <code class="highlight"><span class="n">process_events</span></code> shall be invoked in the main thread, and repeatedly executes the following steps:
+   <p>Objects of class <code class="highlight"><span class="n">asset</span></code> encapsulate a vector or raster asset: a W3C SVG graph, a PNG image, etc. Constructors are provided that consume strings (W3C SVG graph format, etc) and files (textual representation of a graph in the W3C SVG XML format, binary PNG content, etc). Much like objects of class <code class="highlight"><span class="n">regex</span></code>, these can be parsed once and used often, to amortize the cost of constructing the graph. [ Note: Objects of class <code class="highlight"><span class="n">asset</span></code> are akin to figures. – End note ] [ Note: Implementations may define additional asset formats. – End note ]</p>
+   <p>The free function <code class="highlight"><span class="n">process_events</span></code> shall be invoked in the main thread, and repeatedly executes the following steps:
 1.) Blocks waiting for the next window event, or until <code class="highlight"><span class="n">timeout</span></code> seconds have elapsed.
 2.) Processes all available window events.
-3.) Invokes f.</p>
+3.) Invokes <code class="highlight"><span class="n">f</span></code>, it shall be <code class="highlight"><span class="n">Callable</span></code> with no arguments and return <code class="highlight"><span class="kt">bool</span></code>.
+4.) If <code class="highlight"><span class="n">f</span></code> returned false, <code class="highlight"><span class="n">process_events</span></code> returns.</p>
    <p>Objects of class <code class="highlight"><span class="n">window</span></code> encapsulate implementation-defined display windows. A display window is user-visible rectangular grid of pixels that can be the target of user interaction events, such typing, pointing, moving, resizing and closing.</p>
    <p>The constructor <code class="highlight"><span class="n">window</span><span class="o">::</span><span class="n">window</span></code> creates a visible display window with suggested screen footprint <code class="highlight"><span class="n">rect</span></code> in pixels, and suggested name title. Implementations should ensure that these parameters are respected, if possible. The member functions have the following semantics:</p>
    <ul>
@@ -1822,23 +1833,25 @@ As leaders of the C++ community, it certainly is not.</p>
    <p>An example:</p>
 <pre class="highlight"><span class="cp">#include</span> &lt;graphics><span class="cp"></span>
 <span class="cp"></span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">></span>
+<span class="k">using</span> <span class="n">rectangle</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">graphics</span><span class="o">::</span><span class="n">rectangle</span><span class="o">&lt;</span><span class="n">T</span><span class="o">></span><span class="p">;</span>
 <span class="k">using</span> <span class="n">asset</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">graphics</span><span class="o">::</span><span class="n">asset</span><span class="p">;</span>
 <span class="k">using</span> <span class="n">window</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">graphics</span><span class="o">::</span><span class="n">window</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">surface</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">graphics</span><span class="o">::</span><span class="n">surface</span><span class="p">;</span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="n">window</span> <span class="n">w</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span><span class="mi">600</span><span class="p">);</span>
 
-  <span class="n">asset</span> <span class="k">const</span> <span class="n">a</span><span class="p">{</span><span class="n">my_asset_string</span><span class="p">};</span>
+  <span class="n">window</span> <span class="n">w</span><span class="p">(</span><span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">></span><span class="p">{{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">},{</span><span class="mi">600</span><span class="p">,</span><span class="mi">600</span><span class="p">}});</span>
 
-  <span class="n">w</span><span class="p">.</span><span class="n">on_draw</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]()</span> <span class="p">{</span>
-    <span class="n">w</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-    <span class="n">w</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
-  <span class="p">};</span>
-
-  <span class="n">window</span><span class="o">::</span><span class="n">process_events</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+  <span class="n">asset</span> <span class="k">const</span> <span class="n">a</span><span class="p">{</span> <span class="n">my_asset_string_here</span> <span class="p">};</span>
+  <span class="n">w</span><span class="p">.</span><span class="n">on_draw</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="n">surface</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">s</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">s</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">rectangle</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">></span><span class="p">{{</span><span class="mf">0.f</span><span class="p">,</span><span class="mf">0.f</span><span class="p">},{</span><span class="mf">1.f</span><span class="p">,</span><span class="mf">1.f</span><span class="p">}});</span>
+  <span class="p">});</span>
+  <span class="n">window</span><span class="o">::</span><span class="n">process_events</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">closed</span><span class="p">())</span>
       <span class="k">return</span> false<span class="p">;</span>
-    <span class="n">w</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
+    <span class="n">w</span><span class="p">.</span><span class="n">redraw</span><span class="p">();</span>
     <span class="k">return</span> true<span class="p">;</span>
   <span class="p">});</span>
 <span class="p">}</span>
