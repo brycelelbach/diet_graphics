@@ -14,11 +14,11 @@ Date: 2018-05-07
 Markup Shorthands: markdown yes
 </pre>
 
-# Goals
+# Questionable Utility
 
 Before we dive into the details, let's take a step back and discuss **why** some on the committee have a desire to standardize a C++ 2D graphics library.
 
-A few different use cases have been identified:
+A few different use cases have been espoused during the lifetime of this proposal:
 
 * Improving the teachability of C++.
 * Providing graphics programmers with a standard 2D graphics API.
@@ -31,8 +31,25 @@ Being able to see and interact with your code is far more natural.
 Building graphical applications can help the student connect the code they are writing to the real world.
 After all, most non-programmers primarily interact with software that has a graphical interface of some sort.
 
-We agree that this is a goal that C++ should pursue.
-However, we believe that the proposed C++ 2D graphics interface does not facilitate teaching.
+But why does this need to be in the standard?
+There are, of course, many high-quality 3rd party C++ libraries that provide these features.
+But, C++ also lacks a standard build system, packing system and a centralized source of packages.
+This can make it notably more difficult to start using, say, a 3rd party 2D graphics library in C++.
+
+A common criticism of C++ is that the C++'s standard library is not as rich as the core libraries of other languages such as Java, Python, Javascript, Rust, Swift, etc.
+
+For example, C++ does not have:
+
+* A Unicode text library.
+* A HTML library.
+* A JSON library.
+* Database libraries.
+* **TODO**
+
+But is the answer to that to try and standardize everything?
+Many languages with diverse library ecosystems have them because they have package manager.
+
+It is also questionable if the proposed C++ 2D graphics interface actually facilitates teaching.
 
 Let's consider an example. Suppose you are teaching a group of teenagers with no programming experience how to program in C++.
 There are a number of common starting points for young programmers, such as robotics, but let's consider the one that is likely most popular: building a simple game.
@@ -62,8 +79,8 @@ Drawing even simple images with the proposed C++ 2D graphics library is verbose 
 If one was to design a curriculum around this proposal, students will have to learn a lot about computer graphics.
 Our goal is for students to learn C++ programming; graphics should be a teaching aid, not the main focus.
 
-For a C++ 2D graphics library to be a powerful teaching aid, it should be simple, easy to use.
-It should support and leverage established graphics standards and formats, so that programmers can use common image editting tools to generate art assets instead of having to express them programmatically in C++.
+We question whether a drawing library would be a useful teaching aid.
+It seems like a simple facility for building graphical interfaces that supports and leverages established graphics standards and formats and allos programmers can use common image editting tools to generate art assets instead of having to express them programmatically in C++.
  
 ## Enabling Graphics Programmers
 
@@ -71,7 +88,7 @@ There are many professional graphics programmers and who use C++, so it is natur
 
 There are two classes of graphics programmers:
 
-* **Graphical Application Developers (Non-Experts)** build graphics applications, such as games. They are mainly concerned with developing application logic that manipulates graphics asset but not programmatically building the assets. The assets they work with are developed using an **asset toolchain** that generates assets in common formats such as Postscript or SVG by either the graphical application developers or artists that they collaborate with.
+* **Graphical Application Developers (Non-Experts)** build graphics applications, such as games. They are mainly concerned with developing application logic that manipulates graphics asset but they do not typically programmatically building the assets. The assets they work with are developed using some **asset toolchain** that generates assets in common formats such as Postscript or SVG by either the graphical application developers or artists that they collaborate with.
 * **Graphical Framework Developers (Experts)** build graphics frameworks, engines, and libraries that graphical applicaiton developers use.
 
 Naturally, there are many more graphical application developers than there are framework developers.
@@ -79,15 +96,14 @@ Naturally, there are many more graphical application developers than there are f
 ### Graphical Application Developers
 
 Graphical application developers are application programmers who build (usually interactive) software which displays visual output.
-Some examples of graphical games, cartography software, **TODO: More examples**. 
-Most graphical application developers do not produce the art assets they use.
+Some examples include games, cartography software, and scientific visualization.
+Most graphical application developers do not regularly produce the art assets they use programmatically.
+Instead, they consume assets produces upstream by artists, taken from databases, etc.
 
-**TODO: Expand on graphical application developer lifestyle more. How games are build - you develop your assets in some tool, then you write the game logic that manipulates them.**
-
-A common concern when deciding which APIs to use is what the **asset toolchain** will be - e.g. what tools will the artists be using and what format will the assets they produce be in.
+A common concern when graphical application developers decide which APIs to use is what their **asset toolchain** will be - e.g. what tools will generate or what sources will provide the art content.
 Graphical application programmers are going to be inclined to use APIs that don't require explicit conversion, or worse - require them to write the conversion code themselves.
 
-### Graphics Experts
+### Graphical Framework Developers
 
 Now let's talk about the expert graphics programmers who are building graphics libraries and frameworks, which graphical application developers use.
 Those graphical application developers want to pass the assets they created in existing established foramts, such as Postscript or SVG.
@@ -100,173 +116,78 @@ You would have to figure out how to map that primitive to the proposed TS path r
 Some have suggested that professional graphics programmers would use the proposed C++ 2D graphics library.
 Based on the author's collective knowledge of the graphics community, we strongly believe this statement is not true.
 Game/computer vision/visualization/etc developers are not going to use the proposed library.
-
-<!-- **TODO: Summary of why.** -->
-
-It's like we're developing a new (programmatic) asset format (the proposed path representation, etc) - and no one asked for that!
 **Graphics has its own standards, and professional graphics programmers don't want us to make another one.**
 
-We believe that the issues with the proposed C++ 2D graphics library are due to conflicting goals:
+# Design Issues
 
-0.) It is intended to be a **high-level simple interface** that is easy for non graphics programmers to use and makes C++ more teachable.
-1.) It is intended to be a **low-level complex interface** for graphics programmers.
+## How Do I Get A Window?
 
-We believe that second goal is an anti-goal.
+**TODO: After talking with MS, not sure if we should talk about this**
 
-We propose that the following goals should be adopted for a standard C++ 2D graphics API.
+## Lack of Batching Operations
 
-* **Leverage Established Graphics Standards Instead of Creating Our Own:**
-* **Universally Portable:**
-* **Minimal Interface:**
-* **Leave Room for Efficiency:**
+**TODO: TLDR path_builder can be used to batch paths, but there's no mechanism for batching strokes and fills. This will make it inefficient to draw a scene on GPUs.**
 
-<!-- TODO: Less harsh name for this -->
-# Current Design Flaws
+## Doesn't Use Existing Standard Library Facilities
 
-<!--
-## How do I get a Window?
+# Scope
 
-There are some **portability pain points** that graphics programmers experience today that we could help solve.
-For example - how do we get a window in a portable way?
+The scope of this work is broader than just drawing, because there are many library features missing from C++ that a drawing library depends on.
+We should focus on and prioritize these dependencies, which are of broader utility, before revisiting a proposal for a drawing library.
 
-<!-- Begin text dump from Corentin's blog. Needs to be cleaned up. -->
+## Text and Unicode
 
-The first thing one need to do play with pretty pixes is to get a “surface”. A canvas where pixels get drawn.
+N3791, the paper that began work on the proposed drawing library, it was stated that the library should be able to draw text.
 
-So hopefully you have a surface class to which you give dimensions and that gets you a canvas on which to paint.
+The current proposal, P0267r7, has a section on text rendering and display.
+The section in it's entirety is reproduced below:
 
-But wait. On most desktop systems, if you want a surface you need to put it in a window. It’s customary for windows to have titles so a graphics API should probably handle that, right ?
+> [ *Note:* Text rendering and matters related to it, such as font support, will be added at a later date. This section is a placeholder. The integration of text rendering is expected to result in the addition of member functions to the surface class and changes to other parts of the text. — end note ]
 
-You probably also want the window to have an icon. An icon is a file on most system, the format of which is system specific. But sometime it’s not a path, it’s a name corresponding to a path.
+Why is this feature missing from the library?
+It seems likely that this component of the library would depend on the standardization of a text library with Unicode support.
+There is work ongoing in this space (**TODO: Paper numbers**), but it has not yet reached maturity.
 
-The size of a window can change during the execution of the program on some desktop operating system.
+How much value and utility is there in producing a drawing library that cannot draw text?
 
-Sometimes the window can be moved to another screen that has another resolution. And there is this weird new screens where there are virtual pixels that are bigger than true pixels ? Unless you are rendering an images or something then you should make sure you uses all the power of the small crispy pixes since the customer paid a premium for boasting about how crispy his screen is.
+<!-- One of the examples in the paper draws "C++" using the path APIs -->
 
-That woman over there was jealous so she bought a TV with 40 bits per pixels. You can’t really see the difference but are you going to tell her she wasted 5000 bucks ?
+## Geometry
 
-And then there is a screen in your pocket and IT ROTATES in all the directions and now the surface is all wonky. But it has no window so it has no title or icon.
+**TODO**
 
-What time is it ? OH GOSH THAT THING HAS A SCREEN TOO BUT IT’S SO SMALL… Better go and read a book WTF ELECTRONIC INK that you should refresh as little as possible and that only is black ?
+## Linear Algebra
 
-World is crazy, right ? Let’s stick to Linux, shall we? So on Linux there is this thing called X11 which you request a surface to… oh sorry, while you are writing the paper X11 is being deprecated and now you should use Wayland… unless you rather have a frame buffer? It can be accelerated using opengl. or embedded opengl. totally different thing. But really, Vulkan is faster than both these things. Oh and on this system we prefer that you draw the windows yourself, there is a war raging on about CSD vs SSD it has been going on for years and you can’t take side.
+**TODO**
 
-And if you have CSD please make sure that I can drag the windows properly and I have set up sticky corners so that the windows can be aligned nicely. Make sure to handle them. Properly. And when you drag the window it should be a bit transparent, you know about windows compositing right ?
+<!-- **TODO: Linear Algebra (how might the HPC community feel about graphics people designing these types)** -->
 
-Okay so, you start to tell yourself that maybe drawing stuff is complicated. Let the implementors compiler writers and library vendors deal with all that crap. So you provide an API that works everywhere, so it handles absolutely nothing, which is to say it works nowhere.
-
-Now the compiler writers are a bit pissed. All they wanted in life was to write compilers and there they are, trying to understand how GDI work. Plus Microsoft is maybe not really interested in providing a drawing framework, they rather have their users use the WinRT xml-based tools. Meanwhile the GCC guys are still trying to have std::thread work on windows.
-
-Clang people get bug reports that “it doesn’t work”. People have expectations that the STL will work perfectly, consistently, anywhere
-
-No problem. We will make the graphics library optional. So now there are bits of the Standard Library that are not standard. If and when they are implemented, they don’t behave quite the same on every platform. So now the code written using standard tools is not portable. So we need to have a copy of the STL in the repository along with messy build scripts. Back to square one.
-
-Maybe we messed up somewhere? Let’s look at what exists on Internet. People have displays so surely they do write libraries for them, right ?
-
-Turns out Qt is pretty popular. It does a lot more than displaying triangle though. It was released in 1995. It has strings, threads, tons of stuffs. People really did not came up with anything better since ?
-
-wxWidgets is even older. It too has strings and threads and a lot of things that don’t have business being in a graphic library. GTK is the exact same thing.
-
-But C++ goals are more aligned with things like SDL. Released in 1995 with threads and strings and weird things. Allegro, released in 1990. Same thing
-
-You look at other languages. Surely the Rust community has an awesome painting framework, right ? Or the Go people ? Turns out they write wrappers around Qt, or SDL or something, like they deemed to complicated to start from scratch.
-
-So 20 years later you manage to draw a triangle on all platforms. For some definition of all.
--->
-
-## Efficiency
-
-<!-- 
-
-## Efficiency
-
-You will never get decent efficiency out of this API because the current design prohibits an implementation that would utilize GPUs.
-The current API would force frequent
-
-Let's say we want to render a tiger. This is a complex image consisting of a variety of different paths that get stroked and filled in different colors.
-
-The current design of the API would make this difficult to render on a GPU because 
-
-Suppose I want to render a path with a certain render and a certain stroke
-
-According to Mark Kilgard:
-
-TS path == path command
-TS path group (maybe now figure) == path
-TS path_builder == buffer of paths
-
-path has one stroke/fill associated with it.
-
-```
-auto sfc = make_image_surface();
-
-path_builder pb{};
-
-pb.new_figure({ 0.0f, 0.0f });
-pb.line({ 20.0f, 10.0f });
-pb.close_figure({ 0.0f, 0.0f });
-
-sfc.stroke(brush, pb, nullopt, stroke_props{ 10.0f }, nullopt, alised);
-
-pb.new_figure({ 0.0f, 0.0f });
-pb.line({ 20.0f, 10.0f });
-pb.close_figure({ 0.0f, 0.0f });
-
-sfc.stroke(brush, pb, nullopt, stroke_props{ 10.0f }, nullopt, alised);
-```
-
-```
-enum path_command {};
-
-std::vector<path_commands> pc(M);
-std::vector<path>          p(N);
-std::vector<strokes>       s(N); // Color, end caps, dashed or not
-std::vector<fills>         f(N); // Gradient, texture
-
-// Turn this into one contiguous sequence of path commands:
-//
-// p[0] (start of path 0)
-// p[1]
-// p[2] (start of path 1)
-// p[3]
-// p[4] (start of path 2)
-// p[5]
-```
-
-**TODO: Everything should be parameterized and bufferable**
-
-**TODO: This is retained mode.**
-
-The proposed C++ 2D graphics interface is largely an **immediate mode** interface.
-
-However, `path_builder` is retained mode. People will want a batching mechanism that isn't retained.
--->
-
-## TODO: Other Issues
-
-## Scope is Broader than just 2D Graphics
-
-**TODO: Text/Unicode**
-
-**TODO: Geometry**
-
-**TODO: Linear Algebra (how might the HPC community feel about graphics people designing these types)**
+# Priorities
 
 ## Committee Resources are Limited
 
-Committee resources and time are limited.
+An unfortunate reality of our work is that committee resources and time are finite.
 Thus, we must prioritize and even discard proposals either explicitly, or implicitly by never giving them time.
 Directions for ISO C++ (**TODO: Add Paper Number**) attempts to describes how that sorting and prioritizing should happen.
 
-The question then becomes: can the committee spares the time to work on a 2D graphics library and is that a priority?
+We must consider whether spending additional time on this proposal is the right investment for us.
+In its current form, the proposal, which is limited to drawing shapes, is about 150 pages long.
+It's one of the largst proposals currently in flight.
+N3791, the paper which initiated work on a graphics proposal, stated that this feature should "ship in two years".
+That was in 2013.
 
-In its current form, the proposal, which is limited to drawing shapes, is about 150 pages long. It's one of the largst proposals currently in flight.
-
-At the Jacksonville 2018 meeting, during the LEWG discussion of this proposal, a library implementor with ample experience in LWG estimated that it would take the equivalent of an entire meeting of LWG's time to get the proposal out for a Technical Specification. 
+The proposal is still in LEWG and it seems clear that it needs additional time there before it advances, as there are many existing technical issues, some of which are detailed above.
+Both at the Jacksonville 2018 meeting during the LEWG discussion of this proposal and during subsequent discussions, committee members with experience sitting in LWG estimated that it would take the equivalent of an entire meeting of LWG's time to get the proposal out for a Technical Specification. 
 Assuming that estimate is roughly accurate, it indicates a substantial resource investment.
 We only have nine meetings in between each International Standard.
 Approximately two to three of those meetings get spent on ballot resolution, leaving about six meetings for feature development.
-Are we comfortable spending 1/6th of an International Standard development cycle on this proposal?
+Are we comfortable spending 1/6th of the time that LWG would spend on an International Standard development cycle to get this feature into a Technical Specification?
+
+There are many important library facilities that are currently missing from C++ which have greater and broader utility, such as ranges, networking, executors, text, unicode.
+A number of those have been discussed in this proposal, as a drawing library depends on having these features.
+Given that the committee does not have infinite time, and given that there is higher impact work that a drawing library depends on, **TODO** 
+
+## What Belongs in The Standard?
 
 # Alternative Proposal
 
